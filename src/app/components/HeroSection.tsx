@@ -9,7 +9,6 @@ const features = [
   "Tailored Solutions",
   "Industry Insights",
   "Expert Guidance",
-  "Measurable Impact",
 ];
 
 export default function HeroSection({ onEnquireClick }: HeroSectionProps) {
@@ -33,10 +32,7 @@ export default function HeroSection({ onEnquireClick }: HeroSectionProps) {
 
           <ul className="hero-features">
             {features.map((feat) => (
-              <li 
-                key={feat} 
-                className={`hero-feature ${feat === "Measurable Impact" ? "flex sm:hidden" : "flex"}`}
-              >
+              <li key={feat} className="hero-feature">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path
                     strokeLinecap="round"
