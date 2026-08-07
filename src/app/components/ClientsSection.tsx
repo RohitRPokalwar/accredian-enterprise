@@ -55,7 +55,9 @@ export default function ClientsSection() {
                       alt={client.name}
                       width={140}
                       height={60}
-                      className="object-contain h-10 sm:h-14 w-auto"
+                      className={`object-contain w-auto ${
+                        client.name === "Bayer" ? "h-6 sm:h-10" : "h-10 sm:h-14"
+                      }`}
                     />
                   </div>
                 ))}
