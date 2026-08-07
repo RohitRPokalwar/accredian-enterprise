@@ -9,6 +9,7 @@ const features = [
   "Tailored Solutions",
   "Industry Insights",
   "Expert Guidance",
+  "Measurable Impact",
 ];
 
 export default function HeroSection({ onEnquireClick }: HeroSectionProps) {
