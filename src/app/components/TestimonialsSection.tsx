@@ -31,7 +31,18 @@ const testimonials = [
 
 export default function TestimonialsSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = Math.ceil(testimonials.length / 2);
+  const [itemsPerSlide, setItemsPerSlide] = useState(2); // Default to desktop
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerSlide(window.innerWidth < 640 ? 1 : 2);
+    };
+    handleResize(); // Run once on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const totalSlides = Math.ceil(testimonials.length / itemsPerSlide);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
@@ -62,7 +73,7 @@ export default function TestimonialsSection() {
               className="w-full flex-shrink-0 grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 px-0"
             >
               {testimonials
-                .slice(slideIdx * 2, slideIdx * 2 + 2)
+                .slice(slideIdx * itemsPerSlide, slideIdx * itemsPerSlide + itemsPerSlide)
                 .map((t) => (
                   <div
                     key={t.logoAlt}

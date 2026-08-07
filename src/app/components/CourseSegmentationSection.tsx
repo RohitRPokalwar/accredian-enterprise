@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 const categories = [
@@ -73,6 +74,30 @@ const whoShouldJoin = [
 ];
 
 export default function CourseSegmentationSection() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [itemsPerSlide, setItemsPerSlide] = useState(4); // Default to desktop (all 4 items)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerSlide(window.innerWidth < 640 ? 1 : 4);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const totalSlides = Math.ceil(categories.length / itemsPerSlide);
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  }, [totalSlides]);
+
+  useEffect(() => {
+    if (itemsPerSlide === 1) {
+      const timer = setInterval(nextSlide, 3500); // Only auto-play on mobile
+      return () => clearInterval(timer);
+    }
+  }, [nextSlide, itemsPerSlide]);
   return (
     <>
       <h2 className="section-title">
@@ -82,30 +107,61 @@ export default function CourseSegmentationSection() {
         Explore <span>Custom-fit Courses</span> Designed to Address Every Professional Focus
       </p>
 
-      <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-        {categories.map((cat) => (
-          <div
-            key={cat.id}
-            id={`course-${cat.id}`}
-            className="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300 group"
-          >
-            <div className="relative h-40 overflow-hidden bg-gray-100">
-              <Image
-                src={cat.src}
-                alt={cat.label}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
+      <div className="mt-10 sm:mt-12 overflow-hidden relative w-full px-1">
+        <div
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
+          {Array.from({ length: totalSlides }).map((_, slideIdx) => (
+            <div
+              key={slideIdx}
+              className="w-full flex-shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6"
+            >
+              {categories
+                .slice(slideIdx * itemsPerSlide, slideIdx * itemsPerSlide + itemsPerSlide)
+                .map((cat) => (
+                  <div
+                    key={cat.id}
+                    id={`course-${cat.id}`}
+                    className="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300 group"
+                  >
+                    <div className="relative h-40 overflow-hidden bg-gray-100">
+                      <Image
+                        src={cat.src}
+                        alt={cat.label}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="px-5 py-6 flex flex-col items-center text-center">
+                      <h3 className="font-semibold text-xl sm:text-2xl text-[#1a73e8] mb-2">
+                        {cat.label}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">{cat.desc}</p>
+                    </div>
+                  </div>
+                ))}
             </div>
-            <div className="px-5 py-6 flex flex-col items-center text-center">
-              <h3 className="font-semibold text-xl sm:text-2xl text-[#1a73e8] mb-2">
-                {cat.label}
-              </h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{cat.desc}</p>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      {itemsPerSlide === 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          {Array.from({ length: totalSlides }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentSlide(i)}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                currentSlide === i
+                  ? "bg-[#1a73e8]"
+                  : "bg-gray-300 hover:bg-gray-400"
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Strategic Skill Enhancement — live site layout */}
       <div className="mt-12 sm:mt-20 xl:px-6 px-0 lg:mx-0 sm:mx-0 bg-[#1a73e8] sm:rounded-lg flex flex-col md:flex-row overflow-hidden">

@@ -128,8 +128,21 @@ export default function Navbar({ onEnquireClick }: NavbarProps) {
           </div>
         </div>
 
+        {/* Mobile Backdrop */}
         {mobileOpen && (
-          <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-1 shadow-lg overflow-y-auto max-h-[calc(100vh-90px)]">
+          <div 
+            className="lg:hidden fixed inset-0 top-[80px] bg-black/30 backdrop-blur-sm transition-opacity"
+            onClick={() => setMobileOpen(false)}
+          />
+        )}
+
+        {/* Mobile Side Drawer */}
+        <div 
+          className={`lg:hidden fixed top-[80px] right-0 bottom-0 w-[280px] bg-white shadow-2xl border-l border-gray-100 transform transition-transform duration-300 ease-in-out ${
+            mobileOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="px-5 py-6 space-y-2 h-full overflow-y-auto">
             {navLinks.map((link) => {
               const id = link.href.replace("#", "");
               const isActive = activeSection === id;
@@ -137,7 +150,7 @@ export default function Navbar({ onEnquireClick }: NavbarProps) {
                 <button
                   key={link.label}
                   onClick={() => handleNavClick(link.href)}
-                  className={`block w-full text-left px-3 py-2.5 text-sm rounded-lg transition-colors ${
+                  className={`block w-full text-left px-4 py-3 text-sm rounded-lg transition-colors ${
                     isActive
                       ? "text-[#1a73e8] font-semibold bg-blue-50"
                       : "text-gray-700 hover:text-[#1a73e8] hover:bg-gray-50"
@@ -147,17 +160,9 @@ export default function Navbar({ onEnquireClick }: NavbarProps) {
                 </button>
               );
             })}
-            <button
-              onClick={() => {
-                setMobileOpen(false);
-                onEnquireClick();
-              }}
-              className="btn-primary w-full mt-3"
-            >
-              Enquire Now
-            </button>
+
           </div>
-        )}
+        </div>
       </nav>
       <div className="navbar-spacer" />
     </>
