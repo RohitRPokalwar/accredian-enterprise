@@ -33,7 +33,10 @@ export default function HeroSection({ onEnquireClick }: HeroSectionProps) {
 
           <ul className="hero-features">
             {features.map((feat) => (
-              <li key={feat} className="hero-feature">
+              <li 
+                key={feat} 
+                className={`hero-feature ${feat === "Measurable Impact" ? "flex sm:hidden" : "flex"}`}
+              >
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path
                     strokeLinecap="round"
