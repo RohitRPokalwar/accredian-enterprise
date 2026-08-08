@@ -144,7 +144,33 @@ npm start
 
 ---
 
+## 🧭 Approach Taken
+
+### 1. Reference Analysis
+Before writing a single line of code, I studied the live [Accredian Enterprise](https://enterprise.accredian.com/) site thoroughly — noting the section order, color palette (Accredian blue `#1a73e8`), typography scale, spacing rhythm, and interactive behaviors (sticky nav, modal, accordion FAQs, testimonial scroll).
+
+### 2. Design System First
+I established a shared design system in `globals.css` before building any component:
+- CSS custom properties for brand colors, radii, shadows
+- Reusable utility classes: `btn-primary`, `page-section`, `section-container`, `section-title`, `section-subtitle`
+- This ensured visual consistency across all 13 sections without repeating Tailwind utilities everywhere
+
+### 3. Component-First Architecture
+Each page section became its own isolated React component under `src/app/components/`. Every component:
+- Receives only what it needs via props (e.g., `onEnquireClick`)
+- Manages its own local state (accordion open/close, active tab, slide index)
+- Is fully self-contained and reusable
+
+### 4. API Layer (Bonus)
+The lead-capture form was wired to a real Next.js Route Handler (`/api/enquire`) rather than a mock — it validates input, timestamps the record, and persists it to `enquiries.json`. A `GET` endpoint also allows reading all submissions back out.
+
+### 5. Responsive Polish
+Every component was tested at 375 px (mobile), 768 px (tablet), and 1280 px (desktop). Tailwind's mobile-first breakpoints (`sm:`, `md:`, `lg:`) were applied systematically, and the enquiry modal switches from a single-column layout on mobile to a split image+form panel on desktop.
+
+---
+
 ## 🤖 AI Usage Explanation
+
 
 AI tools (specifically **Antigravity** by Google DeepMind) were used throughout this project as an intelligent coding partner.
 
