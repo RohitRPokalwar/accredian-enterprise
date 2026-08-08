@@ -44,20 +44,20 @@ export default function ClientsSection() {
           {Array.from({ length: totalSlides }).map((_, slideIdx) => (
             <div
               key={slideIdx}
-              className="w-full flex-shrink-0 flex items-center justify-center gap-8 sm:gap-20 px-4"
+              className="w-full flex-shrink-0 flex items-center justify-center gap-4 sm:gap-16 px-4"
             >
               {clients
                 .slice(slideIdx * clientsPerSlide, slideIdx * clientsPerSlide + clientsPerSlide)
-                .map((client) => (
-                  <div key={client.name} className="flex items-center justify-center opacity-90 hover:opacity-100 hover:scale-105 transition-all">
+                .map((client) =>(
+                  <div
+                    key={client.name}
+                    className="relative flex-shrink-0 w-20 h-10 sm:w-32 sm:h-14 opacity-90 hover:opacity-100 hover:scale-105 transition-all"
+                  >
                     <Image
                       src={client.src}
                       alt={client.name}
-                      width={140}
-                      height={60}
-                      className={`object-contain w-auto ${
-                        client.name === "Bayer" ? "h-6 sm:h-10" : "h-10 sm:h-14"
-                      }`}
+                      fill
+                      className="object-contain"
                     />
                   </div>
                 ))}
